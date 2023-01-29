@@ -26,7 +26,10 @@ class EmployeesController extends Controller
     //Gets specific employee from the database
     public function getColleagues($id)
     {
-        return Employee::find($id)->colleagues;
+        return Employee
+            ::whereIn('department_id', Employee::where('id', $id)->select('department_id'))
+            ->whereNot('id', $id)
+            ->get();
     }
 
     //adds the given department data to the database given its valid.

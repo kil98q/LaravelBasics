@@ -6,9 +6,9 @@ namespace App\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
@@ -33,7 +33,8 @@ use Illuminate\Support\Collection;
  */
 class Employee extends Model
 {
-    //use HasFactory; Not sure what this is for..
+    use HasFactory;
+
     protected $casts = [
         'id' => 'integer',
         'department_id' => 'integer',
@@ -44,10 +45,11 @@ class Employee extends Model
         return $this->belongsTo(Department::class, 'department_id', 'id');
     }
 
-    public function colleagues(): HasMany
-    {
-        return $this->hasMany(static::class, 'department_id', 'department_id');
-    }
+// Didnt work
+//    public function colleagues(): HasMany
+//    {
+//        return $this->hasMany(static::class, 'department_id', 'department_id');
+//    }
 
     public function findColleagues(): Collection
     {
