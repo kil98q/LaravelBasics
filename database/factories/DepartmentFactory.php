@@ -3,13 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Department;
-use App\Models\Employee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Employee>
+ * @extends Factory<Department>
  */
-class EmployeeFactory extends Factory
+class DepartmentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,9 +18,12 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         return [
-            'department_id' => Department::factory(),
+            'department_name' => 'Department ' . fake()->colorName(),
+            'name_postman' => fake()->firstNameFemale(),
             //
-            'employee_name' => fake()->firstNameMale(),
+            'amount_of_used_coffee_cups' => fake()->numberBetween(0, 2000),
+            //
+            'is_coffee_drinkable' => fake()->boolean(70),
         ];
     }
 }
