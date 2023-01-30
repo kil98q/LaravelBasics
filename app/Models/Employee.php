@@ -3,31 +3,56 @@
 namespace App\Models;
 
 //use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Employee
  *
  * @property int $id
- * @property int $departmentId
- * @property string $employeeName
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|employee newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|employee newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|employee query()
- * @method static \Illuminate\Database\Eloquent\Builder|employee whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|employee whereDepartmentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|employee whereEmployeeName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|employee whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|employee whereUpdatedAt($value)
- * @mixin \Eloquent
+ * //
+ * @property int $department_id
+ * @property string $employee_name
+ * //
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * //
+ * @property-read Department|null $department
+ * @property-read Collection|Employee[] $colleagues
+ * //
+ * @method static Builder|employee newModelQuery()
+ * @method static Builder|employee newQuery()
+ * @method static Builder|employee query()
+ * //
+ * @mixin Eloquent
  */
-class employee extends Model
+class Employee extends Model
 {
-    //use HasFactory; Not sure what this is for..
+    use HasFactory;
+
     protected $casts = [
         'id' => 'integer',
-        'departmentId' => 'integer',
+        'department_id' => 'integer',
     ];
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+// Didnt work
+//    public function colleagues(): HasMany
+//    {
+//        return $this->hasMany(static::class, 'department_id', 'department_id');
+//    }
+
+    public function findColleagues(): Collection
+    {
+        return static::where('department_id', $this->department_id)->get();
+    }
 }

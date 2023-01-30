@@ -2,40 +2,54 @@
 
 namespace App\Models;
 
-//use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
 /**
  * App\Models\Department
  *
  * @property integer $id
- * @property string $departmentName
- * @property string $namePostman
- * @property integer $amountOfUsedCoffeeCups
- * @property boolean $isCoffeeDrinkable
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Department newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Department newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Department query()
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereAmountOfUsedCoffeeCups($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereDepartmentName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereIsCoffeeDrinkable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereNamePostman($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Department whereUpdatedAt($value)
- * @mixin \Eloquent
+ * //
+ * @property string $department_name
+ * @property string $name_postman
+ * //
+ * @property integer $amount_of_used_coffee_cups
+ * @property boolean $is_coffee_drinkable
+ * //
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * //
+ * @method static Builder|Department newModelQuery()
+ * @method static Builder|Department newQuery()
+ * @method static Builder|Department query()
+ * //
+ * @mixin Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employee[] $employees
+ * @property-read int|null $employees_count
+ * @method static \Database\Factories\DepartmentFactory factory(...$parameters)
  */
 class Department extends Model
 {
-    //use HasFactory; not sure what this is for.
+    // Did you figure it out?
+    use HasFactory;
+
     protected $casts = [
         'id' => 'integer',
-        'amountOfUsedCoffeeCups' => 'integer',
-        'isCoffeeDrinkable' => 'boolean',
+        //
+        'amount_of_used_coffee_cups' => 'integer',
+        //
+        'is_coffee_drinkable' => 'boolean',
     ];
+
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class, 'department_id', 'id');
+    }
 }
 
 
